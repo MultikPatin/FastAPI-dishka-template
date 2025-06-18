@@ -1,0 +1,41 @@
+repos:
+
+  # Lock all dependencies version.
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.7.13
+    hooks:
+      - id: uv-lock
+
+  # Common pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+        args:
+          - --unsafe
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: [ --fix=lf ]
+
+  # Lint and format code
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.0
+    hooks:
+      - id: ruff-check
+        args: [ --fix ]
+        types_or: [ python, pyi ]
+      - id: ruff-format
+        types_or: [ python, pyi ]
+
+  # Static type checker
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: bash -c 'mypy . --config-file mypy.ini'
+        language: system
+        types: [ python ]
+        require_serial: true
+        pass_filenames: false
+
